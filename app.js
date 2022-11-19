@@ -12,11 +12,7 @@ const app = express();
 kakaoPassport(app);
 naverPassport(app);
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors({ origin: ["http://localhost:3000", "http://54.180.97.255"], credentials: true }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
