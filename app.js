@@ -14,7 +14,7 @@ kakaoPassport(app);
 naverPassport(app);
 
 const corsOption = {
-  origin: ["http://54.180.97.255", "http://localhost:3000"],
+  origin: ["http://54.180.97.255:3000", "http://localhost:3000"],
   credentials: true,
 };
 
