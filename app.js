@@ -6,17 +6,23 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const kakaoPassport = require("./passport/kakaoStrategy");
 const naverPassport = require("./passport/naverStrategy");
-
 const indexRouter = require("./routes/index");
 
 const app = express();
 kakaoPassport(app);
 naverPassport(app);
 
-const corsOption = {
-  origin: true,
-  credentials: true,
-};
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/", indexRouter);
 
 const { sequelize } = require("./models/index");
 sequelize
@@ -27,15 +33,6 @@ sequelize
   .catch((error) => {
     console.log(`데이터베이스 연결 실패 ${error}`);
   });
-
-app.use(cors(corsOption));
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-
-app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
