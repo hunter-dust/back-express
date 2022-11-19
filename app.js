@@ -13,6 +13,11 @@ const app = express();
 kakaoPassport(app);
 naverPassport(app);
 
+const corsOption = {
+  origin: ["http://54.180.97.255", "http://localhost:3000"],
+  credentials: true,
+};
+
 const { sequelize } = require("./models/index");
 sequelize
   .sync({ force: false })
@@ -23,11 +28,7 @@ sequelize
     console.log(`데이터베이스 연결 실패 ${error}`);
   });
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-
-app.use(cors({ origin: ["http://localhost:3000", "http://54.180.97.255"], credentials: true }));
+app.use(cors(corsOption));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
