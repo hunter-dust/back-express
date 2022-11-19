@@ -103,4 +103,32 @@ router.get("/:cleanPlanId", async (req, res, next) => {
   }
 });
 
+// 일정 완료/취소 [PUT] /cleanPlan/:cleanPlanId/completed
+router.put("/:cleanPlanId/completed", async (req, res, next) => {
+  try {
+    // 사용자 인증 미들웨어 authMiddleware 추가하고 authId는 res.locals.user로 바꾸기
+    const { authId } = req.body;
+    const { cleanPlanId } = req.params;
+
+    const cleanPlanData = await CleanPlan.findOne({ where: { cleanPlanId } });
+    if (!cleanPlanData) {
+      throw new Error("일정이 존재하지 않습니다.");
+    }
+    if (cleanPlanData.authId !== authId) {
+      throw new Error("본인 일정만 완료 및 취소 가능합니다.");
+    }
+
+    await CleanPlan.update(
+      { isCompleted: cleanPlanData.isCompleted ? false : true },
+      { where: { cleanPlanId } }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, isCompleted: !cleanPlanData.isCompleted });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

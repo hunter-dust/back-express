@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       notification: DataTypes.STRING,
       detail: DataTypes.STRING,
-      isCompleted: DataTypes.BOOLEAN,
+      isCompleted: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
       sequelize,
