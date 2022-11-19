@@ -14,7 +14,7 @@ kakaoPassport(app);
 naverPassport(app);
 
 const corsOption = {
-  origin: "*",
+  origin: true,
   credentials: true,
 };
 
