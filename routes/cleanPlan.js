@@ -90,18 +90,21 @@ router.get("/:cleanPlanId", async (req, res, next) => {
     const { cleanPlanId } = req.params;
 
     const cleanPlanData = await CleanPlan.findOne({ where: { cleanPlanId } });
+
     if (!cleanPlanData) {
       throw new Error("일정이 존재하지 않습니다.");
     }
-    if (cleanPlanData.authId !== authId) {
-      throw new Error("본인 일정만 조회 가능합니다.");
-    }
+    // if (cleanPlanData.authId !== authId) {
+    //   throw new Error("본인 일정만 조회 가능합니다.");
+    // }
 
     res.status(200).json({ success: true, data: cleanPlanData });
   } catch (error) {
     next(error);
   }
 });
+
+
 
 // 일정 완료/취소 [PUT] /cleanPlan/:cleanPlanId/completed
 router.put("/:cleanPlanId/completed", async (req, res, next) => {
