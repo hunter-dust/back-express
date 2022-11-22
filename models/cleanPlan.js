@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
       },
-      date: DataTypes.DATE,
+      date: DataTypes.DATEONLY,
       category: DataTypes.STRING,
       title: DataTypes.STRING,
       notification: DataTypes.STRING,
