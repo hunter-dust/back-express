@@ -4,10 +4,10 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/authMiddleware");
 
 // 일정 작성 [POST] /cleanPlan
-router.post("/", async (req, res, next) => {
+router.post("/", authMiddleware, async (req, res, next) => {
   try {
     // 사용자 인증 미들웨어 authMiddleware 추가하고 authId는 res.locals.user로 바꾸기
-    const { authId } = req.body;
+    const { authId } = res.locals.user;
     const { date, category, title, notification, detail } = req.body;
 
     const data = await CleanPlan.create({
@@ -26,10 +26,10 @@ router.post("/", async (req, res, next) => {
 });
 
 // 일정 수정 [PUT] /cleanPlan/:cleanPlanId
-router.put("/:cleanPlanId", async (req, res, next) => {
+router.put("/:cleanPlanId", authMiddleware ,async (req, res, next) => {
   try {
     // 사용자 인증 미들웨어 authMiddleware 추가하고 authId는 res.locals.user로 바꾸기
-    const { authId } = req.body;
+    const { authId } = res.locals.user;
     const { date, category, title, notification, detail } = req.body;
     const { cleanPlanId } = req.params;
 
@@ -60,10 +60,10 @@ router.put("/:cleanPlanId", async (req, res, next) => {
 });
 
 // 일정 삭제 [DELETE] /cleanPlan/:cleanPlanId
-router.delete("/:cleanPlanId", async (req, res, next) => {
+router.delete("/:cleanPlanId", authMiddleware ,async (req, res, next) => {
   try {
     // 사용자 인증 미들웨어 authMiddleware 추가하고 authId는 res.locals.user로 바꾸기
-    const { authId } = req.body;
+    const { authId } = res.locals.user;
     const { cleanPlanId } = req.params;
 
     const cleanPlanData = await CleanPlan.findOne({ where: { cleanPlanId } });
@@ -83,10 +83,10 @@ router.delete("/:cleanPlanId", async (req, res, next) => {
 });
 
 // 청소 상세 조회 [GET] /cleanPlan/:cleanPlanId
-router.get("/:cleanPlanId", async (req, res, next) => {
+router.get("/:cleanPlanId", authMiddleware, async (req, res, next) => {
   try {
     // 사용자 인증 미들웨어 authMiddleware 추가하고 authId는 res.locals.user로 바꾸기
-    const { authId } = req.body;
+    const { authId } = res.locals.user;
     const { cleanPlanId } = req.params;
 
     const cleanPlanData = await CleanPlan.findOne({ where: { cleanPlanId } });
@@ -94,9 +94,9 @@ router.get("/:cleanPlanId", async (req, res, next) => {
     if (!cleanPlanData) {
       throw new Error("일정이 존재하지 않습니다.");
     }
-    // if (cleanPlanData.authId !== authId) {
-    //   throw new Error("본인 일정만 조회 가능합니다.");
-    // }
+    if (cleanPlanData.authId !== authId) {
+      throw new Error("본인 일정만 조회 가능합니다.");
+    }
 
     res.status(200).json({ success: true, data: cleanPlanData });
   } catch (error) {
@@ -107,10 +107,10 @@ router.get("/:cleanPlanId", async (req, res, next) => {
 
 
 // 일정 완료/취소 [PUT] /cleanPlan/:cleanPlanId/completed
-router.put("/:cleanPlanId/completed", async (req, res, next) => {
+router.put("/:cleanPlanId/completed", authMiddleware ,async (req, res, next) => {
   try {
     // 사용자 인증 미들웨어 authMiddleware 추가하고 authId는 res.locals.user로 바꾸기
-    const { authId } = req.body;
+    const { authId } = res.locals.user;
     const { cleanPlanId } = req.params;
 
     const cleanPlanData = await CleanPlan.findOne({ where: { cleanPlanId } });
