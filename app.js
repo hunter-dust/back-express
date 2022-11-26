@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors({ origin: ["http://localhost:3000", "http://54.180.97.255"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000", "http://3.34.125.88"], credentials: true }));
 app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
